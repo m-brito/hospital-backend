@@ -1,11 +1,14 @@
 const express = require('express');
-const routes = require('./routes');
 const sequelize = require('../sequelize');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 app.use(express.json());
 
-sequelize.sync({ force: true }).then(() => {
+app.use('/auth', authRoutes);
+
+// { force: true }
+sequelize.sync().then(() => {
     console.log('Database synchronized!');
 }).catch((error) => {
     console.error('Error synchronizing database:', error);
