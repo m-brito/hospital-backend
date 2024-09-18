@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import { User } from '../models/user'
+import { User } from '../models/User'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
