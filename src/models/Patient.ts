@@ -1,12 +1,14 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
 	BaseEntity,
-	OneToOne,
+	Column,
+	Entity,
 	JoinColumn,
+	OneToOne,
+	PrimaryGeneratedColumn,
 } from 'typeorm'
+
 import { User } from './User'
+import { optional } from 'zod'
 
 @Entity()
 export class Patient extends BaseEntity {
@@ -14,10 +16,10 @@ export class Patient extends BaseEntity {
 	user_id!: number
 
 	@Column()
-	birthdate!: Date
+	birthdate?: Date
 
 	@Column()
-	address!: string
+	address?: string
 
 	@OneToOne(() => User)
 	@JoinColumn({ name: 'user_id' })

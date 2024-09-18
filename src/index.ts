@@ -1,8 +1,9 @@
 import express, { Request, Response } from 'express'
-import dotenv from 'dotenv'
+
 import AppDataSource from './config/ormconfig'
-import authRoutes from './routes/authRoutes'
 import { authMiddleware } from '../middlewares/authMiddleware'
+import authRoutes from './routes/authRoutes'
+import dotenv from 'dotenv'
 
 dotenv.config()
 
