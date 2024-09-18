@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 import dotenv from 'dotenv'
 import AppDataSource from './config/ormconfig'
 import authRoutes from './routes/authRoutes'
+import { authMiddleware } from '../middlewares/authMiddleware'
 
 dotenv.config()
 
@@ -10,6 +11,7 @@ const PORT: number = parseInt(process.env.PORT as string, 10) || 3000
 
 app.use(express.json())
 
+app.use(authMiddleware)
 app.use('/auth', authRoutes)
 
 AppDataSource.initialize()

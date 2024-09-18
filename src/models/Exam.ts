@@ -1,24 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
-import { Appointment } from './Appointment';
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	ManyToOne,
+	JoinColumn,
+	BaseEntity,
+} from 'typeorm'
+import { Appointment } from './Appointment'
 
 @Entity()
 export class Exam extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id!: number;
+	@PrimaryGeneratedColumn()
+	id!: number
 
-    @Column()
-    type!: string;
+	@Column()
+	type!: string
 
-    @Column()
-    date!: Date;
+	@Column()
+	date!: Date
 
-    @Column()
-    result!: string;
+	@Column()
+	result!: string
 
-    @Column()
-    status!: string;
+	@Column()
+	status!: string
 
-    @ManyToOne(() => Appointment)
-    @JoinColumn()
-    appointment!: Appointment;
+	@ManyToOne(() => Appointment)
+	@JoinColumn()
+	appointment!: Appointment
 }

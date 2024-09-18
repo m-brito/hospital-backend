@@ -19,7 +19,15 @@ const AppDataSource = new DataSource({
 	database: process.env.DB_NAME,
 	synchronize: false,
 	logging: false,
-	entities: [User, Administrator, Doctor, Patient, Appointment, Exam, Notification],
+	entities: [
+		User,
+		Administrator,
+		Doctor,
+		Patient,
+		Appointment,
+		Exam,
+		Notification,
+	],
 })
 
 export default AppDataSource

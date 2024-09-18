@@ -4,17 +4,17 @@ import { Patient } from '../models/Patient'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
-import validate from '../../middlewares/validation';
+import validate from '../../middlewares/validation'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'
 
 const registerSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
+	name: z.string().min(1, 'Name is required'),
 	email: z.string().email('Invalid email address'),
 	password: z.string().min(6, 'Password must be at least 6 characters long'),
 	role: z.enum(['admin', 'doctor', 'patient']).optional().default('patient'),
 	birthdate: z.string().optional(),
-    address: z.string().optional(),
+	address: z.string().optional(),
 })
 
 const loginSchema = z.object({
@@ -24,39 +24,43 @@ const loginSchema = z.object({
 
 const router = Router()
 
-router.post('/register', validate(registerSchema), async (req: Request, res: Response) => {
-    const { name, password, email, birthdate, address } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+router.post(
+	'/register',
+	validate(registerSchema),
+	async (req: Request, res: Response) => {
+		const { name, password, email, birthdate, address } = req.body
+		const hashedPassword = await bcrypt.hash(password, 10)
 
-    try {
-        const existingUser = await User.findOneBy({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already in use' });
-        }
+		try {
+			const existingUser = await User.findOneBy({ email })
+			if (existingUser) {
+				return res.status(400).json({ message: 'Email already in use' })
+			}
 
-        const user = new User();
-        user.name = name;
-        user.email = email;
-        user.password = hashedPassword;
-        user.role = 'patient';
+			const user = new User()
+			user.name = name
+			user.email = email
+			user.password = hashedPassword
+			user.role = 'patient'
 
-        const savedUser = await user.save();
+			const savedUser = await user.save()
 
-        if (birthdate || address) {
-            const patient = new Patient();
-            patient.birthdate = new Date(birthdate);
-            patient.address = address;
-            patient.user = savedUser;
+			if (birthdate || address) {
+				const patient = new Patient()
+				patient.birthdate = new Date(birthdate)
+				patient.address = address
+				patient.user = savedUser
 
-            await patient.save();
-        }
+				await patient.save()
+			}
 
-        res.status(201).json(savedUser);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error registering user' });
-    }
-});
+			res.status(201).json(savedUser)
+		} catch (error) {
+			console.error(error)
+			res.status(500).json({ message: 'Error registering user' })
+		}
+	},
+)
 
 router.post(
 	'/login',
