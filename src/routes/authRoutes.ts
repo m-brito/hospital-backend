@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { z, ZodError } = require('zod');
-const JWT_SECRET = process.env.JWT_SECRET;
+import { Router, Request, Response, NextFunction } from 'express';
+import { User } from '../models/user';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { z, ZodError } from 'zod';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 const registerSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -18,7 +18,7 @@ const loginSchema = z.object({
     password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-const validate = (schema) => (req, res, next) => {
+const validate = (schema: z.ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
     try {
         schema.parse(req.body);
         next();
@@ -30,11 +30,14 @@ const validate = (schema) => (req, res, next) => {
     }
 };
 
-router.post('/register', validate(registerSchema), async (req, res) => {
-    const { name, password, email, role = "patient" } = req.body;
+const router = Router();
+
+router.post('/register', validate(registerSchema), async (req: Request, res: Response) => {
+    const { name, password, email, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
-        const user = await User.create({ name, password: hashedPassword, email, role });
+        const user = User.create({ name, password: hashedPassword, email, role });
+        await user.save(); // Salva o usuário no banco de dados
         res.status(201).json(user);
     } catch (error) {
         console.error(error);
@@ -42,16 +45,16 @@ router.post('/register', validate(registerSchema), async (req, res) => {
     }
 });
 
-router.post('/login', validate(loginSchema), async (req, res) => {
+router.post('/login', validate(loginSchema), async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOneBy({ email }); // Usando findOneBy para encontrar o usuário
         if (!user) return res.status(404).json({ message: 'User not found' });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: 'Incorrect password' });
 
-        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
         res.json({ token });
     } catch (error) {
         console.error(error);
@@ -59,4 +62,4 @@ router.post('/login', validate(loginSchema), async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
