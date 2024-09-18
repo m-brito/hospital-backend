@@ -11,7 +11,6 @@ const PORT: number = parseInt(process.env.PORT as string, 10) || 3000
 
 app.use(express.json())
 
-app.use(authMiddleware)
 app.use('/auth', authRoutes)
 
 AppDataSource.initialize()
