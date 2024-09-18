@@ -2,7 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { User } from '../models/user'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import { z, ZodError } from 'zod'
+import { z } from 'zod'
+import validate from '../../middlewares/validation';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'
 
@@ -17,20 +18,6 @@ const loginSchema = z.object({
 	email: z.string().email('Invalid email address'),
 	password: z.string().min(6, 'Password must be at least 6 characters long'),
 })
-
-const validate =
-	(schema: z.ZodSchema) =>
-	(req: Request, res: Response, next: NextFunction) => {
-		try {
-			schema.parse(req.body)
-			next()
-		} catch (error) {
-			if (error instanceof ZodError) {
-				return res.status(400).json({ errors: error.errors })
-			}
-			next(error)
-		}
-	}
 
 const router = Router()
 
