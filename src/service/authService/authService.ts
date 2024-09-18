@@ -1,3 +1,4 @@
+import { Doctor } from '../../models/Doctor';
 import { Patient } from '../../models/Patient';
 import { User } from '../../models/User';
 import bcrypt from 'bcryptjs';
@@ -5,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-interface RegisterParams {
+interface RegisterPatientParams {
     name: string;
     email: string;
     password: string;
@@ -13,7 +14,14 @@ interface RegisterParams {
     address?: string;
 }
 
-export const register = async ({ name, email, password, birthdate, address }: RegisterParams) => {
+interface RegisterDoctorParams {
+    name: string;
+    email: string;
+    password: string;
+    specialty: string;
+}
+
+export const createPatient = async ({ name, email, password, birthdate, address }: RegisterPatientParams) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const existingUser = await User.findOneBy({ email });
@@ -35,6 +43,30 @@ export const register = async ({ name, email, password, birthdate, address }: Re
         patient.user = savedUser;
         await patient.save();
     }
+
+    const { password: _, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword;
+};
+
+export const createDoctor = async ({ name, email, password, specialty }: RegisterDoctorParams) => {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const existingUser = await User.findOneBy({ email });
+    if (existingUser) {
+        throw new Error('Email already in use');
+    }
+
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.password = hashedPassword;
+    user.role = 'doctor';
+    const savedUser = await user.save();
+
+    const doctor = new Doctor();
+    doctor.specialty = specialty;
+    doctor.user = savedUser;
+    await doctor.save();
 
     const { password: _, ...userWithoutPassword } = savedUser;
     return userWithoutPassword;
