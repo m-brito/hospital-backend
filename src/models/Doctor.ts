@@ -3,8 +3,8 @@ import { User } from './User';
 
 @Entity()
 export class Doctor extends BaseEntity {
-    @PrimaryColumn()
-    id!: number;
+    @PrimaryColumn({ name: 'user_id' })
+    user_id!: number;
 
     @Column()
     crm!: string;
@@ -13,6 +13,6 @@ export class Doctor extends BaseEntity {
     specialty!: string;
 
     @OneToOne(() => User)
-    @JoinColumn()
+    @JoinColumn({ name: 'user_id' })
     user!: User;
 }
