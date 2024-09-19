@@ -6,8 +6,7 @@ import {
 	JoinColumn,
 	BaseEntity,
 } from 'typeorm'
-import { Doctor } from './Doctor'
-import { Patient } from './Patient'
+import { User } from './User'
 
 @Entity()
 export class Appointment extends BaseEntity {
@@ -23,11 +22,11 @@ export class Appointment extends BaseEntity {
 	@Column()
 	status!: string
 
-	@ManyToOne(() => Doctor)
-	@JoinColumn()
-	doctor!: Doctor
+	@ManyToOne(() => User)
+	@JoinColumn({name: 'doctor_id'})
+	doctor!: User
 
-	@ManyToOne(() => Patient)
-	@JoinColumn()
-	patient!: Patient
+	@ManyToOne(() => User)
+	@JoinColumn({name: 'patient_id'})
+	patient!: User
 }

@@ -1,4 +1,4 @@
-import * as authService from '../../service/authService/authService';
+import * as authService from '../../service/authService';
 
 import { Request, Response } from 'express';
 import { loginSchema, registerDoctorSchema, registerPatientSchema } from './schema/authSchema';
@@ -17,10 +17,10 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const registerDoctor = async (req: Request, res: Response) => {
-    const { name, email, password, specialty } = req.body;
+    const { name, email, password, specialty, crm } = req.body;
 
     try {
-        const data = registerDoctorSchema.parse({ name, email, password, specialty });
+        const data = registerDoctorSchema.parse({ name, email, password, specialty, crm });
 
         const doctor = await authService.createDoctor(data);
         res.status(201).json(doctor);

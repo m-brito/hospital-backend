@@ -1,6 +1,6 @@
-import { Doctor } from '../../models/Doctor';
-import { Patient } from '../../models/Patient';
-import { User } from '../../models/User';
+import { Doctor } from '../models/Doctor';
+import { Patient } from '../models/Patient';
+import { User } from '../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -19,6 +19,7 @@ interface RegisterDoctorParams {
     email: string;
     password: string;
     specialty: string;
+    crm: string;
 }
 
 export const createPatient = async ({ name, email, password, birthdate, address }: RegisterPatientParams) => {
@@ -48,7 +49,7 @@ export const createPatient = async ({ name, email, password, birthdate, address 
     return userWithoutPassword;
 };
 
-export const createDoctor = async ({ name, email, password, specialty }: RegisterDoctorParams) => {
+export const createDoctor = async ({ name, email, password, specialty, crm }: RegisterDoctorParams) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const existingUser = await User.findOneBy({ email });
@@ -65,6 +66,7 @@ export const createDoctor = async ({ name, email, password, specialty }: Registe
 
     const doctor = new Doctor();
     doctor.specialty = specialty;
+    doctor.crm = crm;
     doctor.user = savedUser;
     await doctor.save();
 
