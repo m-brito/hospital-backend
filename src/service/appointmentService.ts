@@ -1,3 +1,4 @@
+import { Doctor } from '../../src/models/Doctor';
 import { mapDoctorToDTO } from '../../src/mapper/doctorMapper';
 import { Appointment } from '../models/Appointment';
 import { User } from '../models/User';
@@ -11,7 +12,8 @@ export const createAppointment = async (data: {
     const { date, time, doctorId, patientId } = data;
 
     const patient = await User.findOne({ where: { id: patientId, role: 'patient' }, select: ['id', 'name', 'email'] });
-    const doctor = await User.findOne({ where: { id: doctorId, role: 'doctor' }, select: ['id', 'name', 'email'] });
+    const userDoctor = await User.findOne({ where: { id: doctorId, role: 'doctor' }, select: ['id', 'name', 'email'] });
+    const doctor = await Doctor.findOne({ where: { user: userDoctor!}});
 
     if (!patient) {
         throw new Error('Patient not found');
