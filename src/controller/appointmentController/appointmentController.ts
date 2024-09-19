@@ -16,3 +16,17 @@ export const createAppointment = async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+export const getAppointments = async (req: Request, res: Response) => {
+    try {
+        const patientId = req.user?.id as number;
+
+        const appointments = await appointmentService.getAppointmentsByPatient(patientId);
+        return res.status(200).json(appointments);
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ message: error.message });
+        }
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+};

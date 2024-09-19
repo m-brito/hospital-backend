@@ -8,5 +8,6 @@ import validate from '../../middlewares/validation';
 const router = Router();
 
 router.post('/register', authMiddleware, checkRole(["patient"]), validate(createAppointmentSchema), appointmentController.createAppointment);
+router.get('/', authMiddleware, checkRole(["patient"]), appointmentController.getAppointments);
 
 export default router;

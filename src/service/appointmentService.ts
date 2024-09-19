@@ -1,3 +1,4 @@
+import { mapDoctorToDTO } from '../../src/mapper/doctorMapper';
 import { Appointment } from '../models/Appointment';
 import { User } from '../models/User';
 
@@ -27,4 +28,17 @@ export const createAppointment = async (data: {
     appointment.doctor = doctor;
 
     return await Appointment.save(appointment);
+};
+
+export const getAppointmentsByPatient = async (patientId: number) => {
+    const appointments = await Appointment.find({
+        where: { patient: { id: patientId } },
+        relations: ['doctor'],
+        select: ['id', 'date', 'time', 'status', 'doctor'],
+    });
+
+    return appointments.map(appointment => ({
+        ...appointment,
+        doctor: mapDoctorToDTO(appointment.doctor),
+    }));
 };
