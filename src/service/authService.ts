@@ -57,6 +57,11 @@ export const createDoctor = async ({ name, email, password, specialty, crm }: Re
         throw new Error('Email already in use');
     }
 
+    const existingDoctor = await Doctor.findOneBy({ crm });
+    if (existingDoctor) {
+        throw new Error('CRM already in use');
+    }
+
     const user = new User();
     user.name = name;
     user.email = email;
