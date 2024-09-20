@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express'
 import AppDataSource from './config/ormconfig'
 import authRoutes from './routes/authRoutes'
 import appointmentRoutes from './routes/appointmentRoutes'
+import doctorRoutes from './routes/doctorRoutes'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -14,6 +15,7 @@ app.use(express.json())
 
 app.use('/auth', authRoutes)
 app.use('/appointment', appointmentRoutes)
+app.use('/doctor', doctorRoutes)
 
 AppDataSource.initialize()
 	.then(() => {
