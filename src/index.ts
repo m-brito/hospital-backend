@@ -5,12 +5,15 @@ import authRoutes from './routes/authRoutes'
 import appointmentRoutes from './routes/appointmentRoutes'
 import doctorRoutes from './routes/doctorRoutes'
 import dotenv from 'dotenv'
+import cors from 'cors';
+
 
 dotenv.config()
 
 const app = express()
 const PORT: number = parseInt(process.env.PORT as string, 10) || 3000
 
+app.use(cors());
 app.use(express.json())
 
 app.use('/auth', authRoutes)
