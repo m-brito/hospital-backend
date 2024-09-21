@@ -26,6 +26,6 @@ export class Exam extends BaseEntity {
 	status!: string
 
 	@ManyToOne(() => Appointment)
-	@JoinColumn()
+	@JoinColumn({name: 'appointment_id'})
 	appointment!: Appointment
 }

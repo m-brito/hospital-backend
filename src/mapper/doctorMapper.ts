@@ -1,14 +1,6 @@
 import { Doctor } from '../../src/models/Doctor';
 import { User } from '../models/User';
-
-interface DoctorDTO {
-    id: number;
-    name: string;
-    email: string;
-    role: 'admin' | 'doctor' | 'patient';
-    crm: string;
-    specialty: string;
-}
+import { DoctorDTO } from './types';
 
 export const mapDoctorToDTO = (doctor: Doctor): DoctorDTO => {
     const { user } = doctor;

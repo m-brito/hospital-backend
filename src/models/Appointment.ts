@@ -8,6 +8,7 @@ import {
 } from 'typeorm'
 import { User } from './User'
 import { Doctor } from './Doctor'
+import { Patient } from './Patient'
 
 @Entity()
 export class Appointment extends BaseEntity {
@@ -23,11 +24,11 @@ export class Appointment extends BaseEntity {
 	@Column()
 	status!: string
 
-	@ManyToOne(() => Doctor)
+	@ManyToOne(() => Doctor, { eager: true })
 	@JoinColumn({name: 'doctor_id'})
 	doctor!: Doctor
 
-	@ManyToOne(() => User)
+	@ManyToOne(() => Patient, { eager: true })
 	@JoinColumn({name: 'patient_id'})
-	patient!: User
+	patient!: Patient
 }
