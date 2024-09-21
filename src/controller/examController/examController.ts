@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import * as doctorsService from '../../service/doctorService';
+import * as examService from '../../service/examService';
 
-export const getDoctors = async (req: Request, res: Response) => {
+export const createExam = async (req: Request, res: Response) => {
     try {
-        const doctors = await doctorsService.getDoctors();
-        return res.status(200).json(doctors);
+        const exam = await examService.createExam(req.body);
+        return res.status(201).json(exam);
     } catch (error) {
         if (error instanceof Error) {
             return res.status(400).json({ message: error.message });
         }
         return res.status(500).json({ message: 'Internal Server Error' });
     }
-};
+}

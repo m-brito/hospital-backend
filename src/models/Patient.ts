@@ -8,7 +8,6 @@ import {
 } from 'typeorm'
 
 import { User } from './User'
-import { optional } from 'zod'
 
 @Entity()
 export class Patient extends BaseEntity {
@@ -21,7 +20,7 @@ export class Patient extends BaseEntity {
 	@Column()
 	address?: string
 
-	@OneToOne(() => User)
+	@OneToOne(() => User, { eager: true })
 	@JoinColumn({ name: 'user_id' })
 	user!: User
 }

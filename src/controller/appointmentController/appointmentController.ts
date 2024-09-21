@@ -5,7 +5,8 @@ import * as appointmentService from '../../service/appointmentService';
 export const createAppointment = async (req: Request, res: Response) => {
     try {
         const data = createAppointmentSchema.parse(req.body);
-        const patientId = req.user?.id as number;
+        if(!req.user) return res.status(400).json({ message: 'User not found' });
+        const patientId = req.user.id;
 
         const appointment = await appointmentService.createAppointment({ ...data, patientId});
         return res.status(201).json(appointment);
@@ -19,9 +20,8 @@ export const createAppointment = async (req: Request, res: Response) => {
 
 export const getAppointments = async (req: Request, res: Response) => {
     try {
-        const patientId = req.user?.id as number;
-
-        const appointments = await appointmentService.getAppointmentsByPatient(patientId);
+        if(!req.user) return res.status(400).json({ message: 'User not found' });
+        const appointments = await appointmentService.getAppointmentsByPatient(req.user);
         return res.status(200).json(appointments);
     } catch (error) {
         if (error instanceof Error) {

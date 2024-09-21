@@ -2,6 +2,8 @@ import { Doctor } from '../../src/models/Doctor';
 import { mapDoctorToDTO } from '../../src/mapper/doctorMapper';
 import { Appointment } from '../models/Appointment';
 import { User } from '../models/User';
+import { Patient } from '../../src/models/Patient';
+import { mapPatientToDTO } from '../../src/mapper/patientMapper';
 
 export const createAppointment = async (data: {
     date: string;
@@ -11,9 +13,10 @@ export const createAppointment = async (data: {
 }) => {
     const { date, time, doctorId, patientId } = data;
 
-    const patient = await User.findOne({ where: { id: patientId, role: 'patient' }, select: ['id', 'name', 'email'] });
+    const user = await User.findOne({ where: { id: patientId, role: 'patient' }, select: ['id', 'name', 'email'] });
     const userDoctor = await User.findOne({ where: { id: doctorId, role: 'doctor' }, select: ['id', 'name', 'email'] });
     const doctor = await Doctor.findOne({ where: { user: userDoctor!}});
+    const patient = await Patient.findOne({ where: { user: user!}});
 
     if (!patient) {
         throw new Error('Patient not found');
@@ -29,12 +32,17 @@ export const createAppointment = async (data: {
     appointment.patient = patient;
     appointment.doctor = doctor;
 
-    return await Appointment.save(appointment);
+    const appointmentSaved = await Appointment.save(appointment);
+
+    return {
+        ...appointment,
+        doctor: mapDoctorToDTO(appointment.doctor),
+    }
 };
 
-export const getAppointmentsByPatient = async (patientId: number) => {
+export const getAppointmentsByPatient = async (user: User) => {
     const appointments = await Appointment.find({
-        where: { patient: { id: patientId } },
+        where: { patient: { user_id: user.id } },
         relations: ['doctor'],
         select: ['id', 'date', 'time', 'status', 'doctor'],
     });
@@ -42,5 +50,6 @@ export const getAppointmentsByPatient = async (patientId: number) => {
     return appointments.map(appointment => ({
         ...appointment,
         doctor: mapDoctorToDTO(appointment.doctor),
+        patient: mapPatientToDTO(appointment.patient),
     }));
 };
