@@ -41,11 +41,22 @@ export const createAppointment = async (data: {
 };
 
 export const getAppointmentsByPatient = async (user: User) => {
-    const appointments = await Appointment.find({
-        where: { patient: { user_id: user.id } },
-        relations: ['doctor'],
-        select: ['id', 'date', 'time', 'status', 'doctor'],
-    });
+    let appointments;
+    if (user.role === 'patient') {
+        appointments = await Appointment.find({
+            where: { patient: { user_id: user.id } },
+            relations: ['doctor'],
+            select: ['id', 'date', 'time', 'status', 'doctor'],
+        });
+    } else if(user.role === 'doctor') {
+        appointments = await Appointment.find({
+            where: { doctor: { user_id: user.id } },
+            relations: ['patient'],
+            select: ['id', 'date', 'time', 'status', 'patient'],
+        });
+    } else {
+        appointments = await Appointment.find();
+    }
 
     return appointments.map(appointment => ({
         ...appointment,
