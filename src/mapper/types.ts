@@ -20,7 +20,7 @@ export interface ExamDTO {
     id: number;
     appointment_id: number;
     type: string;
-    date: string;
+    date: Date;
     status: string;
     doctor: DoctorDTO;
     patient: PatientDTO;

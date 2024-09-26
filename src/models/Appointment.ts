@@ -5,10 +5,12 @@ import {
 	ManyToOne,
 	JoinColumn,
 	BaseEntity,
+	OneToMany,
 } from 'typeorm'
 import { User } from './User'
 import { Doctor } from './Doctor'
 import { Patient } from './Patient'
+import { Exam } from './Exam'
 
 @Entity()
 export class Appointment extends BaseEntity {
@@ -31,4 +33,7 @@ export class Appointment extends BaseEntity {
 	@ManyToOne(() => Patient, { eager: true })
 	@JoinColumn({name: 'patient_id'})
 	patient!: Patient
+
+	@OneToMany(() => Exam, exam => exam.appointment, { eager: true })
+	exams!: Exam[];
 }

@@ -14,7 +14,7 @@ export const mapExamToDTO = (exam: Exam): ExamDTO => {
         id: exam.id,
         type: exam.type,
         appointment_id: appointment.id,
-        date: exam.date.toString(),
+        date: exam.date,
         status: exam.status,
         doctor: mapDoctorToDTO(appointment.doctor),
         patient: mapPatientToDTO(appointment.patient),
