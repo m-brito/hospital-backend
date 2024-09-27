@@ -119,7 +119,12 @@ export const login = async ({ email, password }: any) => {
 }
 
 export const getLogs = async () => {
-    const logs = await Log.find();
+    const logs = await Log.find({
+        order: {
+            date: 'DESC',
+            time: 'DESC',
+        }
+    });
 
     return logs;
 };
