@@ -7,6 +7,7 @@ import { Patient } from '../models/Patient'
 import { Appointment } from '../models/Appointment'
 import { Exam } from '../models/Exam'
 import { Notification } from '../models/Notification'
+import { Log } from '../../src/models/Log'
 
 dotenv.config()
 
@@ -27,6 +28,7 @@ const AppDataSource = new DataSource({
 		Appointment,
 		Exam,
 		Notification,
+		Log
 	],
 })
 

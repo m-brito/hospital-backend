@@ -12,5 +12,6 @@ const router = Router();
 router.post('/register', validate(registerPatientSchema), authController.register);
 router.post('/doctor/register', authMiddleware, checkRole(["admin"]), validate(registerDoctorSchema), authController.registerDoctor);
 router.post('/login', validate(loginSchema), authController.login);
+router.get('/log', authMiddleware, checkRole(["admin"]), authController.getLogs);
 
 export default router;
