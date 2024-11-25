@@ -21,3 +21,11 @@ export const loginSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
+
+export const patchUserSchema = z.object({
+    photo: z.string().optional(),
+    cep: z.string().min(8, 'CEP must be at least 8 characters long').optional(),
+    neighborhood: z.string().max(100, 'Neighborhood name is too long').optional(),
+    street: z.string().max(150, 'Street name is too long').optional(),
+    number: z.string().optional(),
+});

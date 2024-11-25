@@ -128,3 +128,53 @@ export const getLogs = async () => {
 
     return logs;
 };
+
+export const patchUser = async (data: {
+	photo?: string
+	cep?: string
+	neighborhood?: string
+	street?: string
+	number?: string
+	userId: number
+}) => {
+	const { photo, cep, neighborhood, street, number, userId } = data
+
+	const user = await User.findOne({
+		where: { id: userId },
+		select: ['id', 'name', 'email', 'cep', 'neighborhood', 'street', 'number', 'photo'],
+	})
+
+	if (user) {
+		if (photo) user.photo = photo
+		if (cep) user.cep = cep
+		if (neighborhood) user.neighborhood = neighborhood
+		if (street) user.street = street
+		if (number) user.number = number
+		const newUser = await User.save(user)
+	} else {
+		throw new Error('User not found')
+	}
+
+	return {
+		...user,
+	}
+}
+
+export const getProfile = async (data: {
+	userId: number
+}) => {
+	const { userId } = data
+
+	const user = await User.findOne({
+		where: { id: userId },
+		select: ['id', 'name', 'email', 'cep', 'neighborhood', 'street', 'number', 'photo'],
+	})
+
+	if (!user) {
+		throw new Error('User not found')
+	}
+
+	return {
+		...user,
+	}
+}

@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express'
 
 import AppDataSource from './config/ormconfig'
 import authRoutes from './routes/authRoutes'
+import userRoutes from './routes/userRoutes'
 import appointmentRoutes from './routes/appointmentRoutes'
 import doctorRoutes from './routes/doctorRoutes'
 import examRoutes from './routes/examRoutes'
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(express.json())
 
 app.use('/auth', authRoutes)
+app.use('/user', userRoutes)
 app.use('/appointment', appointmentRoutes)
 app.use('/doctor', doctorRoutes)
 app.use('/exam', examRoutes)

@@ -1,7 +1,7 @@
 import * as authService from '../../service/authService';
 
 import { Request, Response } from 'express';
-import { loginSchema, registerDoctorSchema, registerPatientSchema } from './schema/authSchema';
+import { loginSchema, patchUserSchema, registerDoctorSchema, registerPatientSchema } from './schema/authSchema';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -57,3 +57,34 @@ export const getLogs = async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+export const patchUser = async (req: Request, res: Response) => {
+    try {
+        const data = patchUserSchema.parse(req.body);
+        if(!req.user) return res.status(400).json({ message: 'User not found' });
+        const userId = req.user.id;
+
+        const user = await authService.patchUser({...data, userId});
+        return res.status(200).json(user);
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ message: error.message });
+        }
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        if(!req.user) return res.status(400).json({ message: 'User not found' });
+        const userId = req.user.id;
+
+        const user = await authService.getProfile({userId});
+        return res.status(200).json(user);
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ message: error.message });
+        }
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}

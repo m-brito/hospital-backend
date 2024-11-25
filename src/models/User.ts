@@ -16,4 +16,19 @@ export class User extends BaseEntity {
 
 	@Column()
 	role!: 'admin' | 'doctor' | 'patient'
+
+	@Column({ nullable: true })
+	cep?: string
+
+	@Column({ nullable: true })
+	neighborhood?: string
+
+	@Column({ nullable: true })
+	street?: string
+
+	@Column({ nullable: true })
+	number?: string
+
+	@Column({ nullable: true })
+	photo?: string
 }
