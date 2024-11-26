@@ -145,7 +145,6 @@ export const patchUser = async (data: {
 	})
 
 	if (user) {
-		console.log(cep != null)
 		if (photo != null) user.photo = photo
 		if (cep != null) user.cep = cep
 		if (neighborhood != null) user.neighborhood = neighborhood
