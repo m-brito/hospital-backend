@@ -24,7 +24,7 @@ export const loginSchema = z.object({
 
 export const patchUserSchema = z.object({
     photo: z.string().optional(),
-    cep: z.string().min(8, 'CEP must be at least 8 characters long').optional(),
+    cep: z.string().optional(),
     neighborhood: z.string().max(100, 'Neighborhood name is too long').optional(),
     street: z.string().max(150, 'Street name is too long').optional(),
     number: z.string().optional(),
