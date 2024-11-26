@@ -145,11 +145,11 @@ export const patchUser = async (data: {
 	})
 
 	if (user) {
-		if (photo) user.photo = photo
-		if (cep) user.cep = cep
-		if (neighborhood) user.neighborhood = neighborhood
-		if (street) user.street = street
-		if (number) user.number = number
+		if (photo != null) user.photo = photo
+		if (cep != null) user.cep = cep
+		if (neighborhood != null) user.neighborhood = neighborhood
+		if (street != null) user.street = street
+		if (number != null) user.number = number
 		const newUser = await User.save(user)
 	} else {
 		throw new Error('User not found')
